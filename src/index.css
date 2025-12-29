@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+
+  /* Fresh Water Blue Theme */
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  
+  --primary: 199 89% 48%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 189 94% 94%;
+  --secondary-foreground: 199 89% 30%;
+  
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  
+  --accent: 199 89% 48%;
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 199 89% 48%;
+  
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  
+  --primary: 199 89% 48%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 40% 98%;
+  
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  
+  --accent: 217 33% 17%;
+  --accent-foreground: 210 40% 98%;
+  
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --ring: 199 89% 48%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply tracking-tight font-bold;
+  }
+}
+
+.glass-card {
+  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/20 shadow-lg;
+}
+
+.page-enter {
+  animation: slideIn 0.4s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
