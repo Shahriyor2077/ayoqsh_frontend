@@ -12,6 +12,7 @@ import {
   QrCode,
   History,
   FileBarChart,
+  Printer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -58,6 +59,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     ] : []),
     ...(isOperator ? [
       { name: "Chek yaratish", href: "/", icon: QrCode },
+      { name: "Chop etilmagan", href: "/pending-checks", icon: Printer },
       { name: "Tarix", href: "/history", icon: History },
     ] : []),
   ];

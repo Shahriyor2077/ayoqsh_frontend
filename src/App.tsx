@@ -15,6 +15,7 @@ import StationsPage from "@/pages/stations";
 import ChecksPage from "@/pages/checks";
 import MessagesPage from "@/pages/messages";
 import CustomersReportPage from "@/pages/customers-report";
+import PendingChecksPage from "@/pages/pending-checks";
 import NotFound from "@/pages/not-found";
 
 function ProtectedRoute({ component: Component, allowedRoles }: { component: any; allowedRoles?: string[] }) {
@@ -110,6 +111,12 @@ function Router() {
       <Route path="/history">
         <Layout>
           <ProtectedRoute component={ChecksPage} allowedRoles={["operator", "moderator"]} />
+        </Layout>
+      </Route>
+
+      <Route path="/pending-checks">
+        <Layout>
+          <ProtectedRoute component={PendingChecksPage} allowedRoles={["operator", "moderator"]} />
         </Layout>
       </Route>
 
