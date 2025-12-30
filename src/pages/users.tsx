@@ -194,7 +194,12 @@ export default function UsersPage() {
                           {getRoleName(user.role)}
                         </Badge>
                       </TableCell>
-                      <TableCell>{user.station?.name || "-"}</TableCell>
+                      <TableCell>
+                        {user.role === "customer"
+                          ? (user.lastStation?.name || "-")
+                          : (user.station?.name || "-")
+                        }
+                      </TableCell>
                       <TableCell>
                         <Badge
                           variant={user.isActive ? "default" : "secondary"}

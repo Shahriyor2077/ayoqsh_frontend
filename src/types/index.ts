@@ -29,6 +29,7 @@ export interface User {
     isActive: boolean;
     stationId: number | null;
     station?: { id: number; name: string } | null;
+    lastStation?: { id: number; name: string } | null;
     createdAt: string;
 }
 
