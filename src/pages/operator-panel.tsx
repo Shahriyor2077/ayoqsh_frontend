@@ -102,6 +102,7 @@ export default function OperatorPanel() {
         customerName: quickCustomer.name,
         customerPhone: quickCustomer.phone,
         customerAddress: "",
+        autoUse: true,
       },
       {
         onSuccess: (data) => {

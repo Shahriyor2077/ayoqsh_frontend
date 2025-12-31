@@ -106,6 +106,7 @@ export const createCheckSchema = z.object({
     customerName: z.string().optional(),
     customerPhone: z.string().optional(),
     customerAddress: z.string().optional(),
+    autoUse: z.boolean().optional(),
 });
 
 export type CreateCheck = z.infer<typeof createCheckSchema>;

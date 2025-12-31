@@ -80,6 +80,7 @@ export default function ChecksPage() {
             customerName: quickAddCustomer.name,
             customerPhone: quickAddCustomer.phone,
             customerAddress: "",
+            autoUse: true,
         }, {
             onSuccess: (data) => {
                 setLastCheck(data);
