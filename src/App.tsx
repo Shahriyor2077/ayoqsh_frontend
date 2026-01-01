@@ -32,14 +32,21 @@ function ProtectedRoute({ component: Component, allowedRoles }: { component: any
   }
 
   if (!user) {
-    setLocation("/login");
+    // Rolga qarab to'g'ri login sahifasiga yo'naltirish
+    if (allowedRoles?.includes("operator") && !allowedRoles?.includes("moderator")) {
+      setLocation("/operator");
+    } else if (allowedRoles?.includes("moderator") && !allowedRoles?.includes("operator")) {
+      setLocation("/moderator");
+    } else {
+      setLocation("/operator");
+    }
     return null;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    if (user.role === "operator") return <OperatorPanel />;
-    if (user.role === "moderator") return <AdminDashboard />;
-    return <div className="p-8 text-center">Ruxsat yo'q</div>;
+    // Ruxsat yo'q - o'z paneliga yo'naltirish
+    setLocation("/");
+    return null;
   }
 
   return <Component />;
@@ -58,7 +65,7 @@ function RoleBasedHome() {
   }
 
   if (!user) {
-    setLocation("/login");
+    setLocation("/operator");
     return null;
   }
 
@@ -71,7 +78,6 @@ function RoleBasedHome() {
 function Router() {
   return (
     <Switch>
-      <Route path="/login" component={OperatorLoginPage} />
       <Route path="/moderator" component={AdminLoginPage} />
       <Route path="/operator" component={OperatorLoginPage} />
 

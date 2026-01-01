@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,25 +17,34 @@ const loginSchema = z.object({
 });
 
 export default function OperatorLoginPage() {
-    const { loginMutation, user } = useAuth();
+    const { loginMutation, user, logoutMutation } = useAuth();
     const [, setLocation] = useLocation();
     const { toast } = useToast();
+    const hasCheckedRole = useRef(false);
+    const hasShownToast = useRef(false);
 
     useEffect(() => {
-        if (user) {
+        if (user && !hasCheckedRole.current) {
+            hasCheckedRole.current = true;
             if (user.role === "operator") {
                 setLocation("/");
             } else {
-                toast({ title: "Ruxsat yo'q", description: "Bu sahifa faqat operatorlar uchun", variant: "destructive" });
+                // Boshqa rol - chiqish va "login yoki parol xato" xabari
+                logoutMutation.mutate();
+                if (!hasShownToast.current) {
+                    hasShownToast.current = true;
+                    toast({
+                        title: "Kirish muvaffaqiyatsiz",
+                        description: "Login yoki parol noto'g'ri",
+                        variant: "destructive",
+                    });
+                }
             }
         }
-    }, [user, setLocation, toast]);
-
-    useEffect(() => {
-        if (loginMutation.isSuccess) {
-            setLocation("/");
+        if (!user) {
+            hasCheckedRole.current = false;
         }
-    }, [loginMutation.isSuccess, setLocation]);
+    }, [user, setLocation]);
 
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
@@ -45,8 +54,6 @@ export default function OperatorLoginPage() {
     function onSubmit(values: z.infer<typeof loginSchema>) {
         loginMutation.mutate(values);
     }
-
-    if (user && user.role === "operator") return null;
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-cyan-50 to-blue-100 p-4 relative overflow-hidden">
