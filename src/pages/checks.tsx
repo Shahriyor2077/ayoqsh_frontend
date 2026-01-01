@@ -152,7 +152,7 @@ export default function ChecksPage() {
                                 <TableHead>Mijoz</TableHead>
                                 <TableHead>Holat</TableHead>
                                 <TableHead>Yaratilgan</TableHead>
-                                <TableHead>Amal qilish</TableHead>
+                                <TableHead>Ro'yxatdan o'tgan</TableHead>
                                 {user?.stationId && <TableHead className="text-right">Amal</TableHead>}
                             </TableRow>
                         </TableHeader>
@@ -181,9 +181,9 @@ export default function ChecksPage() {
                                         <TableCell>{check.operator?.fullName || check.operator?.username || '-'}</TableCell>
                                         <TableCell>
                                             <div>
-                                                <p className="font-medium">{check.customerName || '-'}</p>
-                                                {check.customerPhone && (
-                                                    <p className="text-xs text-muted-foreground">{check.customerPhone}</p>
+                                                <p className="font-medium">{check.customer?.fullName || check.customerName || '-'}</p>
+                                                {(check.customer?.phone || check.customerPhone) && (
+                                                    <p className="text-xs text-muted-foreground">{check.customer?.phone || check.customerPhone}</p>
                                                 )}
                                             </div>
                                         </TableCell>
@@ -192,7 +192,7 @@ export default function ChecksPage() {
                                             {format(new Date(check.createdAt), 'dd.MM.yyyy HH:mm')}
                                         </TableCell>
                                         <TableCell className="text-muted-foreground">
-                                            {format(new Date(check.expiresAt), 'dd.MM.yyyy')}
+                                            {check.usedAt ? format(new Date(check.usedAt), 'dd.MM.yyyy HH:mm') : '-'}
                                         </TableCell>
                                         {user?.stationId && (
                                             <TableCell className="text-right">
