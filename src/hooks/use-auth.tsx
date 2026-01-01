@@ -56,10 +56,7 @@ function useLoginMutation() {
       tokenStorage.set(data.accessToken);
       setStoredUser(data.user);
       queryClient.setQueryData(["auth-user"], data.user);
-      toast({
-        title: "Xush kelibsiz!",
-        description: `${data.user.fullName || data.user.username} sifatida kirdingiz`,
-      });
+      // Toast login sahifalarida ko'rsatiladi (rol tekshirilgandan keyin)
     },
     onError: (error: any) => {
       toast({

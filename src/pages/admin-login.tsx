@@ -30,9 +30,17 @@ export default function AdminLoginPage() {
         if (user && !hasCheckedRole.current) {
             hasCheckedRole.current = true;
             if (user.role === "moderator") {
+                // Muvaffaqiyatli login
+                if (!hasShownToast.current) {
+                    hasShownToast.current = true;
+                    toast({
+                        title: "Xush kelibsiz!",
+                        description: `${user.fullName || user.username} sifatida kirdingiz`,
+                    });
+                }
                 setLocation("/");
             } else {
-                // Noto'g'ri rol - sessiyani tozalash (toast'siz)
+                // Noto'g'ri rol - sessiyani tozalash
                 tokenStorage.remove();
                 localStorage.removeItem("ayoqsh_user");
                 queryClient.setQueryData(["auth-user"], null);
@@ -49,6 +57,7 @@ export default function AdminLoginPage() {
         }
         if (!user) {
             hasCheckedRole.current = false;
+            hasShownToast.current = false;
         }
     }, [user, setLocation, queryClient, toast]);
 

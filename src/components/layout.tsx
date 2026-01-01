@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import { tokenStorage } from "@/types";
 import {
   LayoutDashboard,
   Users,
@@ -29,7 +30,7 @@ import {
 import { useState } from "react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { user, logoutMutation } = useAuth();
+  const { user } = useAuth();
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
@@ -124,12 +125,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 
   const handleLogout = () => {
+    const redirectUrl = isModerator ? "/moderator" : "/operator";
     setLogoutDialogOpen(false);
-    logoutMutation.mutate(undefined, {
-      onSettled: () => {
-        window.location.href = "/login";
-      },
-    });
+    // Tokenni tozalash va darhol redirect qilish
+    tokenStorage.remove();
+    localStorage.removeItem("ayoqsh_user");
+    window.location.href = redirectUrl;
   };
 
   return (
