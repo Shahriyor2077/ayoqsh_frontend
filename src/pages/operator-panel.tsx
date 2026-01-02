@@ -42,18 +42,18 @@ export default function OperatorPanel() {
   // Avtomatik print funksiyasi
   const autoPrint = useCallback(
     (check: Check) => {
-      const w = window.open("", "_blank");
-      if (!w) return;
-
-      const stationName = check.station?.name || user?.station?.name || "";
       const qrImg = check.qrCode ? `<img src="${check.qrCode}" style="width:200px;height:200px;object-fit:contain" alt="QR Code" />` : "";
 
-      const html = `<!DOCTYPE html><html><head><title>Chek</title><style>body{font-family:Arial;text-align:center;padding:20px;margin:0}.check{border:2px solid #000;padding:20px;width:280px;margin:auto}.title{font-size:32px;font-weight:bold;margin:0}.station{font-size:16px;color:#333;margin:5px 0 10px 0}.code{font-size:28px;font-weight:bold;font-family:monospace;letter-spacing:2px;margin:10px 0}.litr{font-size:32px;font-weight:bold;color:#0066cc;margin:10px 0}.label{font-size:14px;color:#666;margin:5px 0}.contact{font-size:11px;color:#666;margin-top:15px;border-top:1px dashed #ccc;padding-top:10px}</style></head><body><div class="check"><h1 class="title">NBS GAZ OIL</h1><p class="station">Avtomabillarga Yoqilg'i Quyish Shahobchasi</p>${qrImg}<p class="code">${check.code}</p><p class="label">Chek kodi</p><p class="litr">${check.amountLiters} L</p><p style="font-size:12px;color:#666">${format(new Date(), "dd.MM.yyyy HH:mm")}</p><p class="contact">Murojaat uchun: @nbs_gaz_oil ga yozing</p></div><script>window.print();setTimeout(()=>window.close(),500);</script></body></html>`;
+      const html = `<!DOCTYPE html><html><head><title>Chek</title><style>body{font-family:Arial;text-align:center;padding:20px;margin:0}.check{border:2px solid #000;padding:20px;width:280px;margin:auto}.title{font-size:32px;font-weight:bold;margin:0}.station{font-size:16px;color:#333;margin:5px 0 10px 0}.code{font-size:28px;font-weight:bold;font-family:monospace;letter-spacing:2px;margin:10px 0}.litr{font-size:32px;font-weight:bold;color:#0066cc;margin:10px 0}.label{font-size:14px;color:#666;margin:5px 0}.contact{font-size:11px;color:#666;margin-top:15px;border-top:1px dashed #ccc;padding-top:10px}</style></head><body><div class="check"><h1 class="title">NBS GAZ OIL</h1><p class="station">Avtomabillarga Yoqilg'i Quyish Shahobchasi</p>${qrImg}<p class="code">${check.code}</p><p class="label">Chek kodi</p><p class="litr">${check.amountLiters} L</p><p style="font-size:12px;color:#666">${format(new Date(), "dd.MM.yyyy HH:mm")}</p><p class="contact">Murojaat uchun: @nbs_gaz_oil ga yozing</p></div><script>window.onafterprint=function(){window.close();};window.print();</script></body></html>`;
 
-      w.document.write(html);
-      w.document.close();
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const w = window.open(url, "_blank");
+      if (w) {
+        w.onload = () => URL.revokeObjectURL(url);
+      }
     },
-    [user?.station?.name]
+    []
   );
 
   // Chek yaratish - faqat litr bilan
@@ -123,7 +123,15 @@ export default function OperatorPanel() {
 
   const handlePrint = () => {
     if (!lastCheck) return;
-    autoPrint(lastCheck);
+    const checkToPrint = lastCheck; // Referensni saqlash
+    setShowQR(false); // Dialogni yopish
+    // requestAnimationFrame bilan keyingi renderdan keyin print qilish
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        autoPrint(checkToPrint);
+        inputRef.current?.focus();
+      });
+    });
   };
 
   // Tarixdan qayta print
