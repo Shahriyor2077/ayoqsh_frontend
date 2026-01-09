@@ -18,8 +18,8 @@ export default function PendingChecksPage() {
     const [selectedCheck, setSelectedCheck] = useState<Check | null>(null);
     const [showQR, setShowQR] = useState(false);
 
-    // Faqat pending (chop etilmagan) cheklar
-    const unprintedChecks = checks?.filter((c) => c.status === "pending") || [];
+    // Chop etilmagan cheklar - isPrinted: false
+    const unprintedChecks = checks?.filter((c) => !c.isPrinted) || [];
 
     const handleCopyCode = (code: string) => {
         navigator.clipboard.writeText(code);
@@ -120,9 +120,15 @@ export default function PendingChecksPage() {
                                         <TableCell className="text-muted-foreground">{check.customerPhone || "-"}</TableCell>
                                         <TableCell className="font-bold text-primary">{check.amountLiters} L</TableCell>
                                         <TableCell>
-                                            <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
-                                                Kutilmoqda
-                                            </span>
+                                            {check.status === "used" ? (
+                                                <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
+                                                    Ishlatilgan
+                                                </span>
+                                            ) : (
+                                                <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
+                                                    Kutilmoqda
+                                                </span>
+                                            )}
                                         </TableCell>
                                         <TableCell className="text-muted-foreground">
                                             {format(new Date(check.createdAt), "dd.MM.yyyy HH:mm")}

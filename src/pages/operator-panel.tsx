@@ -32,7 +32,8 @@ export default function OperatorPanel() {
   const printRef = useRef<HTMLDivElement>(null);
 
   const myChecks = checks?.filter((c) => c.operatorId === user?.id) || [];
-  const pendingChecks = myChecks.filter((c) => c.status === "pending");
+  // Chop etilmagan cheklar - isPrinted: false
+  const unprintedChecks = myChecks.filter((c) => !c.isPrinted);
 
   const filteredCustomers = customers?.filter(
     (c) =>
@@ -326,21 +327,27 @@ export default function OperatorPanel() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {pendingChecks.length === 0 ? (
+                  {unprintedChecks.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                         Chop etilmagan chek yo'q.
                       </TableCell>
                     </TableRow>
                   ) : (
-                    pendingChecks.map((check) => (
+                    unprintedChecks.map((check) => (
                       <TableRow key={check.id}>
                         <TableCell className="font-mono font-bold">{check.code}</TableCell>
                         <TableCell className="font-bold text-lg">{check.amountLiters} L</TableCell>
                         <TableCell>
-                          <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
-                            Kutilmoqda
-                          </span>
+                          {check.status === "used" ? (
+                            <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
+                              Ishlatilgan
+                            </span>
+                          ) : (
+                            <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
+                              Kutilmoqda
+                            </span>
+                          )}
                         </TableCell>
                         <TableCell className="text-muted-foreground">{format(new Date(check.createdAt), "dd.MM HH:mm")}</TableCell>
                         <TableCell className="text-right">

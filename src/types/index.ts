@@ -39,6 +39,7 @@ export interface Check {
     qrCode: string | null;
     amountLiters: string;
     status: CheckStatus;
+    isPrinted: boolean;
     customerName: string | null;
     customerPhone: string | null;
     customerAddress: string | null;
